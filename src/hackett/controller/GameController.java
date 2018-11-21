@@ -2,12 +2,10 @@
 The Controller of Beyond14. Bridges the view to the model yet keeps them separate.
  */
 
-
 package hackett.controller;
 
 import hackett.model.ModelManager;
 import hackett.view.GuiHandler;
-
 import javax.swing.*;
 
 public class GameController {
