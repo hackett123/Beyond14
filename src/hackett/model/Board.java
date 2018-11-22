@@ -8,6 +8,7 @@ public class Board {
     private static final int NUM_COLS = 4;
 
     private int currMaxTile;
+    private int tileCount;
 
 
     /*
@@ -15,7 +16,36 @@ public class Board {
      */
     public Board() {
         this.board = new Tile[4][4];
-        System.out.println(this);
+        this.currMaxTile = 0;
+        this.tileCount = 0;
+    }
+
+    public int getTileCount() {
+        return this.tileCount;
+    }
+    public int getCurrMaxTile() {
+        return this.currMaxTile;
+    }
+
+    public Tile getTileAt(int x, int y) {
+        return board[x][y];
+    }
+
+    /*
+    Called upon when we remove the highest value.
+     */
+    public int findNewCurrMax() {
+        int max = -1;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (board[i][j] != null) {
+                    if (board[i][j].getVal() > max) {
+                        max = board[i][j].getVal();
+                    }
+                }
+            }
+        }
+        return max;
     }
 
     public boolean isEmpty() {
@@ -58,9 +88,29 @@ public class Board {
              y = (int) (Math.random() * 4);
         } while (board[x][y] != null);
 
-
         board[x][y] = newTile;
+        this.tileCount++;
+        if (val > this.currMaxTile) {
+            this.currMaxTile = val;
+        }
 
+        return true;
+    }
+
+    /*
+    Overloads with other addTile for if we are adding to a specific tile. This occurs with user input.
+     */
+    public boolean addTile(int val, int x, int y) {
+        if (isFull() || board[x][y] != null) {
+            return false;
+        }
+
+        Tile newTile = new Tile(val);
+        board[x][y] = newTile;
+        this.tileCount++;
+        if (val > this.currMaxTile) {
+            this.currMaxTile = val;
+        }
 
         return true;
     }
@@ -69,9 +119,25 @@ public class Board {
     Based off of the coordinate in the board, we nullify a tile.
     We only do this if 1) we are combining tiles to a different tile, or
     2) we are using a break tool.
+    We return a boolean : true if we are successful.
      */
-    public void removeTile(int row, int col) {
-        board[row][col] = null;
+    public boolean removeTile(int row, int col) {
+
+        //only remove if present.
+        if (board[row][col] != null) {
+
+            int thisVal = board[row][col].getVal();
+            board[row][col] = null;
+            this.tileCount--;
+
+            //reset current max if we removed it.
+            if (thisVal == this.currMaxTile) {
+                this.currMaxTile = findNewCurrMax();
+            }
+
+            return true;
+        }
+        return false;
     }
 
 

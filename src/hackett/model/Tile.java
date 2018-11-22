@@ -33,6 +33,20 @@ public class Tile {
     }
 
     /*
+    Get tile color
+     */
+    public Color getTileColor() {
+        return this.tileColor;
+    }
+
+    /*
+    Get text color
+     */
+    public Color getTextColor() {
+        return this.textColor;
+    }
+
+    /*
     Raise our value by one after the n tiles are combined. Note only one is incremented,
     and the others are thrown away (to null).
      */
